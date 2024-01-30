@@ -1,0 +1,78 @@
+/*
+Given a time in -hour AM/PM format, convert it to military (24-hour) time.
+Note: - 12:00:00AM on a 12-hour clock is 00:00:00 on a 24-hour clock.
+- 12:00:00PM on a 12-hour clock is 12:00:00 on a 24-hour clock.
+ */
+
+'use strict';
+
+const fs = require('fs');
+
+process.stdin.resume();
+process.stdin.setEncoding('utf-8');
+
+let inputString = '';
+let currentLine = 0;
+
+process.stdin.on('data', function(inputStdin) {
+    inputString += inputStdin;
+});
+
+process.stdin.on('end', function() {
+    inputString = inputString.split('\n');
+
+    main();
+});
+
+function readLine() {
+    return inputString[currentLine++];
+}
+
+/*
+ * Complete the 'timeConversion' function below.
+ *
+ * The function is expected to return a STRING.
+ * The function accepts STRING s as parameter.
+ */
+
+function timeConversion(s) {
+    // Write your code here
+    let t = s.slice(-2);
+    let am = s.slice(0,2);
+    let rt = s.slice(0,s.length -2);
+    //console.log("rt==",rt);
+    if(t == 'PM' && am!='12')
+    {
+        let pm = parseInt(rt) + 12 +s.slice(2,s.length-2);
+        return pm;
+        //console.log("pm===",pm);  
+    }
+    else
+    {
+        //let am = s.slice(0,2);
+        //console.log("am==",am);
+        if(am == '12' && t!='PM')
+        {
+            am = '00';
+            return am+s.slice(2,s.length-2);
+            //console.log("ammm==",am+s.slice(2,s.length-2));
+        }
+        else{
+            return s.slice(0,-2);
+        //console.log("elsee==",s.slice(0,-2));
+        }
+    }
+
+}
+
+function main() {
+    const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
+
+    const s = readLine();
+
+    const result = timeConversion(s);
+
+    ws.write(result + '\n');
+
+    ws.end();
+}
